@@ -16,28 +16,35 @@
     <!-- Fonts -->
     <link rel="dns-prefetch" href="//fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.10/css/select2.min.css" rel="stylesheet" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.10/js/select2.min.js"></script>
 
     <!-- Styles -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Nunito', sans-serif;
+        }
+
+        .login-box .card,
+        .register-box .card {
+            margin-bottom: 0;
+            left: 5%;
+        }
+
+        .hidden {
+            display: inline-block;
+        }
+
+        .fixed {
+            position: absolute;
+        }
+    </style>
 </head>
 
 <body>
     <div id="app">
-        <div>
-            @if (Route::has('login'))
-            <div class="hidden fixed top-0 right-0 px-6 py-4 sm:block">
-                @auth
-                <a href="{{ url('/dashboard') }}" class="text-sm text-gray-700 "><b>Dashboard</b></a>
-                @else
-                <a href="{{ route('login') }}" class="text-large text-gray-700 "><b>Login</b></a>
-
-                @if (Route::has('register'))
-                <a href="{{ route('register') }}" class="text-large text-gray-700 ">| <b>Register</b></a>
-                @endif
-                @endauth
-            </div>
-            @endif
-        </div>
         <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm">
             <div class="container">
                 <a class="navbar-brand" href="{{ url('/') }}">

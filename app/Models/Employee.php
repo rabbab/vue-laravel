@@ -10,11 +10,16 @@ class Employee extends Model
     use HasFactory;
 
     protected $fillable = [
-        'name',
+        'first_name',
+        'last_email',
+        'company',
         'email',
-        'logo',
-        'website',
+        'phone',
         'created_at',
         'updated_at',
     ];
+    public function company()
+    {
+        return $this->belongsTo('App\Models\Company', 'company');
+    }
 }

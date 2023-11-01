@@ -16,7 +16,6 @@ class EmployeeController extends Controller
      */
     public function index()
     {
-        //
     }
 
     /**
@@ -27,20 +26,6 @@ class EmployeeController extends Controller
      */
     public function store(Request $request)
     {
-        $validator = Validator::make($request->all(), [
-            'first_name' => 'required',
-            'last_name' => 'required',
-            'company_id' => 'required',
-            'email' => 'email',
-            'phone' => 'nullable',
-        ]);
-
-        if ($validator->fails()) {
-            return response()->json(['error' => $validator->errors()], 400);
-        }
-
-        $employee = Employee::create($request->all());
-        return response()->json($employee, 201);
     }
 
     /**

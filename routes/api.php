@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\API\CompanyController;
 use App\Http\Controllers\API\EmployeeController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -20,5 +21,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 Route::group(['middleware' => 'auth:sanctum'], function () {
     //Empolyees
-    Route::apiResources(['Employees' => EmployeeController::class]);
+
 });
+Route::apiResources(['Employees' => EmployeeController::class]);
+Route::apiResources(['companies' => CompanyController::class]);

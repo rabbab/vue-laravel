@@ -57,14 +57,6 @@ const toast = Swal.mixin({
 });
 window.toast = toast;
 
-//Router
-Vue.use(VueRouter);
-
-const router = new VueRouter({
-    mode: 'history',
-    routes
-});
-
 //Form
 window.form = Form;
 
@@ -99,6 +91,14 @@ Vue.use(Datetime);
 import VueLazyload from 'vue-lazyload';
 
 Vue.use(VueLazyload);
+
+//Router
+Vue.use(VueRouter);
+
+const router = new VueRouter({
+    mode: 'history',
+    routes
+});
 
 const app = new Vue({
     el: '#app',
