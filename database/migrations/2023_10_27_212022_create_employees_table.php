@@ -18,7 +18,10 @@ class CreateEmployeesTable extends Migration
             $table->string('first_name')->required(); // First name (required)
             $table->string('last_name')->required(); // Last name (required)
             $table->unsignedBigInteger('company_id'); // Company (foreign key)
-            $table->foreign('company_id')->references('id')->on('companies');
+            $table->foreign('company_id')
+                ->references('id')
+                ->on('companies')
+                ->onDelete('cascade'); // Add onDelete('cascade') here
             $table->string('email')->nullable(); // Email
             $table->string('phone')->nullable(); // Phone
             $table->timestamps();

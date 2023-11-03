@@ -1,29 +1,44 @@
 <template>
     <div>
-        <div class="modal fade" id="addEditCompanyModal" city="dialog" aria-labelledby="addEditCompanyModalLabel"
+        <div class="modal fade" id="addEditEmployeeModal" city="dialog" aria-labelledby="addEditEmployeeModalLabel"
             aria-hidden="true" data-keyboard="false" data-backdrop="static">
             <div class="modal-dialog modal-dialog-centered" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="addEditCompanyModalLabel" v-if="editMode === false">
-                            Company
+                        <h5 class="modal-title" id="addEditEmployeeModalLabel" v-if="editMode === false">
+                            Employee
                         </h5>
-                        <h5 class="modal-title" id="addEditCompanyModalLabel" v-else>
-                            Edit Company
+                        <h5 class="modal-title" id="addEditEmployeeModalLabel" v-else>
+                            Edit Employee
                         </h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
-                    <form @submit.prevent="editMode ? editCompany() : addCompany()">
+                    <form @submit.prevent="editMode ? editEmployee() : addEmployee()">
                         <input type="hidden" name="_token" :value="csrf" />
                         <div class="modal-body">
                             <div class="form-group">
-                                <label>Name<span class="required-star">*</span></label>
-                                <input v-model="form.name" type="text" name="name" class="form-control"
-                                    :class="{ 'is-invalid': form.errors.has('name') }" />
-                                <div class="error-message" v-if="form.errors.has('name')"
-                                    v-html="form.errors.get('name')" />
+                                <label>First Name<span class="required-star">*</span></label>
+                                <input v-model="form.first_name" type="text" name="first_name" class="form-control"
+                                    :class="{ 'is-invalid': form.errors.has('first_name') }" />
+                                <div class="error-message" v-if="form.errors.has('first_name')"
+                                    v-html="form.errors.get('first_name')" />
+                            </div>
+                            <div class="form-group">
+                                <label>Last Name<span class="required-star">*</span></label>
+                                <input v-model="form.last_name" type="text" name="last_name" class="form-control"
+                                    :class="{ 'is-invalid': form.errors.has('last_name') }" />
+                                <div class="error-message" v-if="form.errors.has('last_name')"
+                                    v-html="form.errors.get('last_name')" />
+                            </div>
+                            <div class="form-group">
+                                <label>Company<span class="required-star"></span>*</label>
+                                <v-select v-model="form.company_id" :options="companies" label="name"
+                                    :reduce="company => company.id" :selectOnTab="true" :key="form.company_id"
+                                    :class="{ 'is-invalid': form.errors.has('company_id') }" />
+                                <div class="error-message" v-if="form.errors.has('company_id')"
+                                    v-html="form.errors.get('company_id')" />
                             </div>
                             <div class="form-group">
                                 <label>Email</label>
@@ -33,25 +48,21 @@
                                     v-html="form.errors.get('email')" />
                             </div>
                             <div class="form-group">
-                                <label>Logo</label>
-                                <input type="file" @change="onFileChange" accept="image/*" />
-                            </div>
-                            <div class="form-group">
-                                <label>Website<span class="required-star">*</span></label>
-                                <input v-model="form.website" type="text" class="form-control"
-                                    :class="{ 'is-invalid': form.errors.has('website') }" />
-                                <div class="error-message" v-if="form.errors.has('website')"
-                                    v-html="form.errors.get('website')" />
+                                <label>Phone</label>
+                                <input v-model="form.phone" type="text" class="form-control"
+                                    :class="{ 'is-invalid': form.errors.has('phone') }" />
+                                <div class="error-message" v-if="form.errors.has('phone')"
+                                    v-html="form.errors.get('phone')" />
                             </div>
                         </div>
 
                         <div class="modal-footer">
-                            <button @click.prevent="addCompany" v-if="editMode === false" type="submit"
+                            <button @click.prevent="addEmployee" v-if="editMode === false" type="submit"
                                 class="btn btn-primary">
-                                Create Company
+                                Create Employee
                             </button>
-                            <button @click.prevent="editCompany" v-else type="submit" class="btn btn-primary">
-                                Edit Company
+                            <button @click.prevent="editEmployee" v-else type="submit" class="btn btn-primary">
+                                Edit Employee
                             </button>
 
                             <button type="button" class="btn btn-danger" data-dismiss="modal">
@@ -65,9 +76,8 @@
     </div>
 </template>
 <script>
-import { VFileInput } from 'vuetify/lib';
 export default {
-    name: "addEditCompanyModal",
+    name: "addEditEmployeeModal",
     data() {
         return {
             csrf: document.querySelector('meta[name="csrf-token"]')
@@ -78,30 +88,24 @@ export default {
             // Create a new form instance
             form: new form({
                 id: "",
-                name: "",
+                first_name: "",
+                last_name: "",
+                company_id: "",
                 email: "",
-                logo: "",
-                website: "",
+                phone: "",
             }),
         };
     },
     components: {
-        VFileInput,
     },
     methods: {
-        hideFile() {
-            this.hide = true;
-        },
-        onFileChange(event) {
-            this.form.logo = event.target.files[0];
-        },
-        addCompany() {
+        addEmployee() {
             this.$Progress.start();
             this.form
-                .post("api/companies")
+                .post("api/employees")
                 .then(() => {
-                    Fire.$emit("reloadCompanies");
-                    $("#addEditCompanyModal").modal("hide");
+                    Fire.$emit("reloadEmployees");
+                    $("#addEditEmployeeModal").modal("hide");
                     toast.fire({
                         icon: "success",
                         title: "Record created successfully",
@@ -116,13 +120,13 @@ export default {
                     });
                 });
         },
-        editCompany() {
+        editEmployee() {
             this.$Progress.start();
             this.form
-                .put("api/companies/" + this.form.id)
+                .put("api/employees/" + this.form.id)
                 .then(() => {
-                    Fire.$emit("reloadCompanies");
-                    $("#addEditCompanyModal").modal("hide");
+                    Fire.$emit("reloadEmployees");
+                    $("#addEditEmployeeModal").modal("hide");
                     toast.fire({
                         icon: "success",
                         title: "Record updated successfully",
@@ -142,7 +146,7 @@ export default {
     mounted() {
         var form = this.form;
         var that = this;
-        $("#addEditCompanyModal").on("show.bs.modal", function (e) {
+        $("#addEditEmployeeModal").on("show.bs.modal", function (e) {
             if (e.relatedTarget) {
                 that.editMode = true;
                 form.fill(e.relatedTarget);
@@ -151,6 +155,18 @@ export default {
                 form.reset();
                 that.editMode = false;
             }
+            axios.get("api/getCompanies")
+                .then((response) => {
+                    that.companies = response.data;
+                    that.$Progress.finish();
+                })
+                .catch(() => {
+                    that.$Progress.fail();
+                    toast.fire({
+                        icon: "error",
+                        title: "SOMETHING_WENT_WRONG",
+                    });
+                });
         });
     },
 };

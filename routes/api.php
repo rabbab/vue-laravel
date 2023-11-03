@@ -23,5 +23,6 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
     //Empolyees
 
 });
-Route::apiResources(['Employees' => EmployeeController::class]);
+Route::apiResources(['employees' => EmployeeController::class]);
 Route::apiResources(['companies' => CompanyController::class]);
+Route::get('/getCompanies', [CompanyController::class, 'getCompanies']);

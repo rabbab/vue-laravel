@@ -1,13 +1,13 @@
 <template>
     <div>
         <!-- Modal -->
-        <div class="modal fade" id="viewCompanyModal" role="dialog" aria-labelledby="viewCity" aria-hidden="true">
+        <div class="modal fade" id="viewEmployeeModal" role="dialog" aria-labelledby="viewCity" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered modalLarge" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="viewCompanyModal">
-                            View Company:
-                            {{ companyData.name }}
+                        <h5 class="modal-title" id="viewEmployeeModal">
+                            View Employee:
+                            {{ employeeData.name }}
                         </h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
@@ -16,24 +16,27 @@
                     <div class="modal-body">
                         <!-- Print Data -->
                         <div id="printData">
-                            <div class="text-center">
-                                <h5>Logo</h5>
-                                <img :src="`/storage/${companyData.logo}`" alt="Company Logo"
-                                    style="max-width: 200px; max-height: 200px;" />
-                            </div>
                             <table class="table table-bordered">
                                 <tbody>
                                     <tr>
-                                        <th>Name</th>
-                                        <td>{{ companyData.name }}</td>
+                                        <th>First Name</th>
+                                        <td>{{ employeeData.first_name }}</td>
+                                    </tr>
+                                    <tr>
+                                        <th>Last Name</th>
+                                        <td>{{ employeeData.last_name }}</td>
                                     </tr>
                                     <tr>
                                         <th>Email</th>
-                                        <td>{{ companyData.email }}</td>
+                                        <td>{{ employeeData.email }}</td>
                                     </tr>
                                     <tr>
-                                        <th>Website</th>
-                                        <td>{{ companyData.website }}</td>
+                                        <th>Company</th>
+                                        <td>{{ employeeData.company && employeeData.company.name }}</td>
+                                    </tr>
+                                    <tr>
+                                        <th>Phone</th>
+                                        <td>{{ employeeData.phone }}</td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -54,8 +57,8 @@
 </template>
 <script>
 export default {
-    name: "viewCompanyModal",
-    props: ["companyData"],
+    name: "viewEmployeeModal",
+    props: ["employeeData"],
     data() {
         return {};
     },

@@ -12,7 +12,7 @@ class Employee extends Model
     protected $fillable = [
         'first_name',
         'last_email',
-        'company',
+        'company_id',
         'email',
         'phone',
         'created_at',
@@ -20,6 +20,6 @@ class Employee extends Model
     ];
     public function company()
     {
-        return $this->belongsTo('App\Models\Company', 'company');
+        return $this->belongsTo('App\Models\Company', 'company_id');
     }
 }

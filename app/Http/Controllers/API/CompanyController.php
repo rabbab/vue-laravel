@@ -17,7 +17,7 @@ class CompanyController extends Controller
     public function index(Request $request)
     {
         //Declare a global variable with relation orders!
-        $company =  Company::whereNotNull('name');;
+        $company =  Company::whereNotNull('name');
         //Check if there is any search value
         if ($request->search != "") {
         }
@@ -58,17 +58,9 @@ class CompanyController extends Controller
 
         // Create a new Company record
         $company = new Company();
-        $company->name = $request->input('name');
-        $company->email = $request->input('email');
-        $company->website = $request->input('website');
-
-        // if ($request->hasFile('logo')) {
-        //     $file = $request->file('logo');
-        //     $fileName = time() . '_' . $file->getClientOriginalName();
-        //     $filePath = public_path('public/logos') . '/' . $fileName;
-        //     $file->move(public_path('public/logos'), $fileName);
-        //     $company->logo = $fileName;
-        // }
+        $company->name = $request->name;
+        $company->email = $request->email;
+        $company->website = $request->website;
 
         // Handle the logo file upload
         if ($request->hasFile('logo')) {
@@ -91,7 +83,6 @@ class CompanyController extends Controller
      */
     public function show($id)
     {
-        //
     }
 
     /**
@@ -103,7 +94,26 @@ class CompanyController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $this->validate($request, [
+            'name' => 'required',
+            'email' => 'email|nullable',
+            'logo' => 'required',
+            'website' => 'required',
+        ]);
+        $company = Company::findOrfail($id);
+        $company->name = $request->name;
+        $company->email = $request->email;
+        $company->website = $request->website;
+        // Handle the logo file upload
+        if ($request->hasFile('logo')) {
+            $logo = $request->file('logo');
+            $logoPath = $logo->store('public/logos');
+            $company->logo = str_replace('public/', '', $logoPath);
+        }
+        // Save the Company record to the database
+        $company->save();
+
+        return response()->json("Record updated successfully", 200);
     }
 
     /**
@@ -114,6 +124,14 @@ class CompanyController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $company = Company::findOrFail($id);
+        $company->delete();
+        return response()->json("Record deleted successfully", 200);
+    }
+    public function getCompanies()
+    {
+        $companies = Company::all();
+
+        return $companies;
     }
 }

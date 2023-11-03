@@ -51,6 +51,12 @@
                                             <v-icon color="green" class="edit-icon mr-2" small @click="viewCompany(item)">
                                                 mdi-eye
                                             </v-icon>
+                                            <v-icon color="blue" class="edit-icon mr-2" small @click="editCompany(item)">
+                                                mdi-pencil
+                                            </v-icon>
+                                            <v-icon color="red" class="delete-icon" small @click="deleteCompany(item.id)">
+                                                mdi-delete
+                                            </v-icon>
                                         </template>
                                     </v-data-table>
                                 </div>
@@ -160,6 +166,49 @@ export default {
         viewCompany(company) {
             this.companyInfo = company;
             $("#viewCompanyModal").modal("show", company);
+        },
+        editCompany(company) {
+            this.companyInfo = company;
+            $("#addEditCompanyModal").modal("show", company);
+        },
+        deleteCompany(id) {
+            swal
+                .fire({
+                    title: "Confirm",
+                    text: "You won't be able to revert this!",
+                    type: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#3085d6",
+                    cancelButtonColor: "#d33",
+                    cancelButtonText: "Cancle",
+                    confirmButtonText: "Yes, delete it!",
+                })
+                .then((result) => {
+                    this.$Progress.start();
+                    if (result.value) {
+                        // Send request to the server
+                        this.form
+                            .delete("api/companies/" + id)
+                            .then(() => {
+                                this.cities.total -= 1;
+                                Fire.$emit("reloadCompanies");
+                                this.$Progress.finish();
+                                swal.fire(
+                                    "Deleted",
+                                    "Delete Message Success",
+                                    "success"
+                                );
+                            })
+                            .catch(() => {
+                                this.$Progress.fail();
+                                swal.fire(
+                                    "Failed",
+                                    "Delete Message Error",
+                                    "warning"
+                                );
+                            });
+                    }
+                });
         },
     },
     created() {
