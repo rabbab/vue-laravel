@@ -4,8 +4,11 @@ namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
 use App\Models\Company;
+use App\Notifications\NewCompanyNotification;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Rule;
+use Illuminate\Support\Facades\Notification;
 
 class CompanyController extends Controller
 {
@@ -48,7 +51,7 @@ class CompanyController extends Controller
         $validator = Validator::make($request->all(), [
             'name' => 'required',
             'email' => 'email|nullable',
-            'logo' => 'required',
+            'logo' => ['required', Rule::dimensions()->minWidth(1000)->minHeight(1000)],
             'website' => 'required',
         ]);
 
@@ -70,6 +73,8 @@ class CompanyController extends Controller
         }
         // Save the Company record to the database
         $company->save();
+        // Send the email notification without associating it with a specific user
+        Notification::send(Notification::route('HR', 'hello@xepos.co.uk'), new NewCompanyNotification($company));
 
         // Return the newly created company as a JSON response
         return response()->json($company, 201);
@@ -97,7 +102,7 @@ class CompanyController extends Controller
         $this->validate($request, [
             'name' => 'required',
             'email' => 'email|nullable',
-            'logo' => 'required',
+            'logo' =>  ['required', Rule::dimensions()->minWidth(1000)->minHeight(1000)],
             'website' => 'required',
         ]);
         $company = Company::findOrfail($id);

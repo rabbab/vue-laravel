@@ -91,7 +91,8 @@ export default {
             sortBy: "",
             sortDesc: "",
             headers: [
-                { text: "NAME", value: "first_name" },
+                { text: "FIRST NAME", value: "first_name" },
+                { text: "LAST NAME", value: "first_name" },
                 { text: "EMAIL", value: "email" },
                 { text: "Company", value: "company.name" },
                 { text: "phone", value: "phone" },
